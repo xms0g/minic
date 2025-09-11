@@ -3,7 +3,7 @@ project(mt C)
 
 set(CMAKE_C_STANDARD 11)
 
-add_library(${PROJECT_NAME} SHARED src/mt.c)
+add_library(${PROJECT_NAME} SHARED src/minic.c)
 
 target_include_directories(${PROJECT_NAME} PUBLIC ${PROJECT_SOURCE_DIR}/include)
 
