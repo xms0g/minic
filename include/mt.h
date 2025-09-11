@@ -40,10 +40,13 @@
 typedef void (* test_func)();
 
 typedef struct {
-    size_t count;
-    size_t capacity;
+    struct {
+        size_t count;
+        size_t capacity;
+        test_func* data;
+    } tests;
+
     const char* name;
-    test_func* tests;
 } MTSuite;
 
 void mtInitRegistry();

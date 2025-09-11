@@ -2,38 +2,40 @@
 #include <string.h>
 
 typedef struct {
-    size_t count;
-    size_t capacity;
-    MTSuite* suites;
+    struct {
+        size_t count;
+        size_t capacity;
+        MTSuite* data;
+    } suites;
 } MTRegistry;
 
 static MTRegistry registry;
 
 void mtInitRegistry() {
-    registry.count = 0;
-    registry.capacity = 2;
-    registry.suites = malloc(registry.capacity * sizeof(MTSuite));
+    registry.suites.count = 0;
+    registry.suites.capacity = 2;
+    registry.suites.data = malloc(registry.suites.capacity * sizeof(MTSuite));
 }
 
 void mtRunAllTests() {
-    for (size_t i = 0; i < registry.count; i++) {
-        const MTSuite currentSuite = registry.suites[i];
+    for (size_t i = 0; i < registry.suites.count; i++) {
+        const MTSuite currentSuite = registry.suites.data[i];
         
-        for (size_t j = 0; j < currentSuite.count; j++) {
-            currentSuite.tests[j]();
+        for (size_t j = 0; j < currentSuite.tests.count; j++) {
+            currentSuite.tests.data[j]();
         }
     }
 }
 
 void mtRunSuiteTests(const char* name) {
-   for (size_t i = 0; i < registry.count; i++) {
-       const MTSuite currentSuite = registry.suites[i];
+   for (size_t i = 0; i < registry.suites.count; i++) {
+       const MTSuite currentSuite = registry.suites.data[i];
 
        if (strcmp(currentSuite.name, name) == 0)
             continue;
         
-       for (size_t j = 0; j < currentSuite.count; j++) {
-           currentSuite.tests[j]();
+       for (size_t j = 0; j < currentSuite.tests.count; j++) {
+           currentSuite.tests.data[j]();
        }
 
        break;
@@ -41,11 +43,11 @@ void mtRunSuiteTests(const char* name) {
 }
 
 MTSuite* mtAddSuite(const char* name) {
-    if (registry.count == registry.capacity) {
-        registry.capacity *= 2;
-        registry.suites = realloc(registry.suites, registry.capacity * sizeof(MTSuite));
+    if (registry.suites.count == registry.suites.capacity) {
+        registry.suites.capacity *= 2;
+        registry.suites.data = realloc(registry.suites.data, registry.suites.capacity * sizeof(MTSuite));
         
-        if (!registry.suites) {
+        if (!registry.suites.data) {
             fprintf(stderr, "realloc failed");
             return NULL;
         }
@@ -53,36 +55,36 @@ MTSuite* mtAddSuite(const char* name) {
 
     MTSuite suite;
     suite.name = name;
-    suite.count = 0;
-    suite.capacity = 2;
+    suite.tests.count = 0;
+    suite.tests.capacity = 2;
     
-    suite.tests = malloc(suite.capacity * sizeof(test_func));
-    if (!suite.tests) {
+    suite.tests.data = malloc(suite.tests.capacity * sizeof(test_func));
+    if (!suite.tests.data) {
         fprintf(stderr, "malloc failed");
         return NULL;
     }
 
-    const size_t idx = registry.count++;
-    registry.suites[idx] = suite;
+    const size_t idx = registry.suites.count++;
+    registry.suites.data[idx] = suite;
 
-    return &registry.suites[idx];
+    return &registry.suites.data[idx];
 }
 
 void mtAddTest(MTSuite* suite, const test_func funcPtr) {
-    if (suite->count == suite->capacity) {
-        suite->capacity *= 2;
-        suite->tests = realloc(suite->tests, suite->capacity * sizeof(test_func));
+    if (suite->tests.count == suite->tests.capacity) {
+        suite->tests.capacity *= 2;
+        suite->tests.data = realloc(suite->tests.data, suite->tests.capacity * sizeof(test_func));
         
-        if (!suite->tests) {
+        if (!suite->tests.data) {
             fprintf(stderr, "realloc failed");
             return;
         }
     }
 
-    suite->tests[suite->count++] = funcPtr;
+    suite->tests.data[suite->tests.count++] = funcPtr;
 }
 
 void mtCleanupRegistry() {
-    free(registry.suites->tests);
-    free(registry.suites);
+    free(registry.suites.data->tests.data);
+    free(registry.suites.data);
 }
