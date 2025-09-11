@@ -5,7 +5,7 @@ float add(const float x, const float y) {
 }
 
 TEST_FUNC(add) {
-    EXPECT_FLOAT_EQUAL(add(3.0f,5.0f), 8.0f, "add");
+    EXPECT_FLOAT_EQ(add(3.0f, 5.0f), 8.0f, "add");
 }
 
 int main() {

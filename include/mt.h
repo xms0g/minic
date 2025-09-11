@@ -16,7 +16,7 @@
         printf("==============================================|\n"); \
     } while (0)
 
-#define EXPECT_FLOAT_EQUAL(result, expected, func_name) \
+#define EXPECT_FLOAT_EQ(result, expected, func_name) \
     do { \
         if (fabsf((result) - (expected)) >= MT_EPSILON) { \
             PRINT_RESULT(expected, result, func_name, "failed"); \
@@ -25,7 +25,7 @@
         } \
     } while (0)
 
-#define EXPECT_DOUBLE_EQUAL(result, expected, func_name) \
+#define EXPECT_DOUBLE_EQ(result, expected, func_name) \
     do { \
         if (fabs((result) - (expected)) >= MT_EPSILON) { \
             PRINT_RESULT(expected, result, func_name, "failed"); \
