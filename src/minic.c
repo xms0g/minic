@@ -13,6 +13,13 @@ typedef struct {
 
 static MTRegistry registry;
 
+static void printHeader(size_t testCount, size_t suiteCount);
+static void printFooter(size_t testCount, size_t suiteCount);
+static void printSuiteStart(const char* name, size_t count);
+static void printSuiteEnd(const char* name, size_t count, int ms);
+static void printTestStart(const char* suiteName, const char* funcName);
+static void printTestEnd(const char* suiteName, const char* funcName);
+
 void mtInitRegistry() {
     registry.failedCount = 0;
     registry.totalTestCount = 0;
@@ -20,13 +27,6 @@ void mtInitRegistry() {
     registry.capacity = 2;
     registry.suites = malloc(registry.capacity * sizeof(MTSuite));
 }
-
-static void printHeader(size_t testCount, size_t suiteCount);
-static void printFooter(size_t testCount, size_t suiteCount);
-static void printSuiteStart(const char* name, size_t count);
-static void printSuiteEnd(const char* name, size_t count, int ms);
-static void printTestStart(const char* suiteName, const char* funcName);
-static void printTestEnd(const char* suiteName, const char* funcName);
 
 void mtRunAllTests() {
     printHeader(registry.totalTestCount, registry.count);
