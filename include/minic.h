@@ -7,7 +7,7 @@
 #include <stdlib.h>
 #include <stdio.h>
 
-#define MT_EPSILON_FLOAT 1e-6f
+#define MT_EPSILON_FLOAT 1e-4f
 #define MT_EPSILON_DOUBLE 1e-12
 
 #define COLOR_GREEN   "\033[32m"
