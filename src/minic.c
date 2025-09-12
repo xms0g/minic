@@ -14,6 +14,7 @@ typedef struct {
 static MTRegistry registry;
 
 void mtInitRegistry() {
+    registry.failedCount = 0;
     registry.totalTestCount = 0;
     registry.count = 0;
     registry.capacity = 2;
