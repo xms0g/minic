@@ -1,2 +1,2 @@
 add_executable(example example.c)
-target_link_libraries(example PRIVATE mt)
+target_link_libraries(example PRIVATE minic)
