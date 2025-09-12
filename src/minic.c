@@ -20,49 +20,30 @@ void mtInitRegistry() {
     registry.suites = malloc(registry.capacity * sizeof(MTSuite));
 }
 
-void mtRunAllTests() {
-    printf(COLOR_GREEN"[==========] " COLOR_RESET"Running %lu tests from %lu test suites.\n",
-           registry.totalTestCount, registry.count);
-    printf(COLOR_GREEN"[----------] " COLOR_RESET"Global test environment set-up.\n");
+static void printHeader(size_t testCount, size_t suiteCount);
+static void printFooter(size_t testCount, size_t suiteCount);
+static void printSuiteStart(const char* name, size_t count);
+static void printSuiteEnd(const char* name, size_t count, int ms);
+static void printTestStart(const char* suiteName, const char* funcName);
+static void printTestEnd(const char* suiteName, const char* funcName);
 
+void mtRunAllTests() {
+    printHeader(registry.totalTestCount, registry.count);
 
     for (size_t i = 0; i < registry.count; i++) {
         const MTSuite currentSuite = registry.suites[i];
 
-        printf(COLOR_GREEN"[----------] " COLOR_RESET"%lu tests from %s\n",
-               currentSuite.count, currentSuite.name);
-
+        printSuiteStart(currentSuite.name, currentSuite.count);
         for (size_t j = 0; j < currentSuite.count; j++) {
-            const TestFunc func = currentSuite.cases[j];
+            const TestFunc* func = &currentSuite.cases[j];
 
-            printf(COLOR_GREEN"[ RUN      ] " COLOR_RESET"%s.%s\n", currentSuite.name, func.name);
-
-            func.callback();
-
-            if (failed) {
-                registry.failedCount++;
-
-                printf(COLOR_RED "[  FAILED  ] " COLOR_RESET "%s.%s (%d ms)\n", currentSuite.name, func.name, 0);
-                failed = 0;
-            } else {
-                printf(COLOR_GREEN "[       OK ] " COLOR_RESET "%s.%s (%d ms)\n", currentSuite.name, func.name, 0);
-            }
+            printTestStart(currentSuite.name, func->name);
+            func->callback();
+            printTestEnd(currentSuite.name, func->name);
         }
-
-        printf(COLOR_GREEN"[----------] " COLOR_RESET"%lu tests from %s (%d ms total)\n\n",
-               currentSuite.count, currentSuite.name, 0);
+        printSuiteEnd(currentSuite.name, currentSuite.count, 0);
     }
-
-    printf(COLOR_GREEN"[----------] " COLOR_RESET"Global test environment tear-down.\n");
-    printf(COLOR_GREEN"[==========] " COLOR_RESET"%lu tests from %lu test suites ran. (%d ms total)\n",
-           registry.totalTestCount, registry.count, 0);
-
-    if (registry.failedCount == 0) {
-        printf(COLOR_GREEN "[  PASSED  ] " COLOR_RESET "%lu tests.\n", registry.totalTestCount);
-    } else {
-        printf(COLOR_GREEN "[  PASSED  ] " COLOR_RESET "%lu tests.\n", registry.totalTestCount - registry.failedCount);
-        printf(COLOR_RED "[  FAILED  ] " COLOR_RESET "%lu tests.\n", registry.failedCount);
-    }
+    printFooter(registry.totalTestCount, registry.count);
 }
 
 void mtRunSuiteTests(const char* name) {
@@ -71,39 +52,18 @@ void mtRunSuiteTests(const char* name) {
 
         if (strcmp(currentSuite.name, name) != 0)
             continue;
-        printf(COLOR_GREEN"[==========] " COLOR_RESET"Running %lu tests from 1 test suites.\n", currentSuite.count);
-        printf(COLOR_GREEN"[----------] " COLOR_RESET"Global test environment set-up.\n");
-        printf(COLOR_GREEN"[----------] " COLOR_RESET"%lu tests from %s\n",
-              currentSuite.count, currentSuite.name);
 
+        printHeader(currentSuite.count, 1);
+        printSuiteStart(currentSuite.name, currentSuite.count);
         for (size_t j = 0; j < currentSuite.count; j++) {
-            const TestFunc func = currentSuite.cases[j];
+            const TestFunc* func = &currentSuite.cases[j];
 
-            printf(COLOR_GREEN"[ RUN      ] " COLOR_RESET"%s.%s\n", currentSuite.name, func.name);
-
-            func.callback();
-
-            if (failed) {
-                registry.failedCount++;
-
-                printf(COLOR_RED "[  FAILED  ] " COLOR_RESET "%s.%s (%d ms)\n", currentSuite.name, func.name, 0);
-                failed = 0;
-            } else {
-                printf(COLOR_GREEN "[       OK ] " COLOR_RESET "%s.%s (%d ms)\n", currentSuite.name, func.name, 0);
-            }
+            printTestStart(currentSuite.name, func->name);
+            func->callback();
+            printTestEnd(currentSuite.name, func->name);
         }
-        printf(COLOR_GREEN"[----------] " COLOR_RESET"%lu tests from %s (%d ms total)\n\n",
-              currentSuite.count, currentSuite.name, 0);
-        printf(COLOR_GREEN"[----------] " COLOR_RESET"Global test environment tear-down.\n");
-        printf(COLOR_GREEN"[==========] " COLOR_RESET"%lu tests from 1 test suites ran. (%d ms total)\n",
-               currentSuite.count, 0);
-
-        if (registry.failedCount == 0) {
-            printf(COLOR_GREEN "[  PASSED  ] " COLOR_RESET "%lu tests.\n", currentSuite.count);
-        } else {
-            printf(COLOR_GREEN "[  PASSED  ] " COLOR_RESET "%lu tests.\n", currentSuite.count - registry.failedCount);
-            printf(COLOR_RED "[  FAILED  ] " COLOR_RESET "%lu tests.\n", registry.failedCount);
-        }
+        printSuiteEnd(currentSuite.name, currentSuite.count, 0);
+        printFooter(currentSuite.count, 1);
         break;
     }
 }
@@ -157,3 +117,47 @@ void mtCleanupRegistry() {
     }
     free(registry.suites);
 }
+
+static void printHeader(const size_t testCount, const size_t suiteCount) {
+    printf(COLOR_GREEN "[==========] " COLOR_RESET "Running %lu tests from %lu test suites.\n",
+           testCount, suiteCount);
+    printf(COLOR_GREEN "[----------] " COLOR_RESET "Global test environment set-up.\n");
+}
+
+static void printFooter(const size_t testCount, const size_t suiteCount) {
+    printf(COLOR_GREEN"[----------] " COLOR_RESET"Global test environment tear-down.\n");
+    printf(COLOR_GREEN"[==========] " COLOR_RESET"%lu tests from %lu test suites ran. (%d ms total)\n",
+           testCount, suiteCount, 0);
+
+    if (registry.failedCount == 0) {
+        printf(COLOR_GREEN "[  PASSED  ] " COLOR_RESET "%lu tests.\n", testCount);
+    } else {
+        printf(COLOR_GREEN "[  PASSED  ] " COLOR_RESET "%lu tests.\n", testCount - registry.failedCount);
+        printf(COLOR_RED "[  FAILED  ] " COLOR_RESET "%lu tests.\n", registry.failedCount);
+    }
+}
+
+static void printSuiteStart(const char* name, const size_t count) {
+    printf(COLOR_GREEN"[----------] " COLOR_RESET"%lu tests from %s\n", count, name);
+}
+
+static void printSuiteEnd(const char* name, const size_t count, const int ms) {
+    printf(COLOR_GREEN"[----------] " COLOR_RESET"%lu tests from %s (%d ms total)\n\n", count, name, ms);
+}
+
+static void printTestStart(const char* suiteName, const char* funcName) {
+    printf(COLOR_GREEN"[ RUN      ] " COLOR_RESET"%s.%s\n", suiteName, funcName);
+}
+
+static void printTestEnd(const char* suiteName, const char* funcName) {
+    if (failed) {
+        failed = false;
+        registry.failedCount++;
+
+        printf(COLOR_RED "[  FAILED  ] " COLOR_RESET "%s.%s (%d ms)\n", suiteName, funcName, 0);
+    } else {
+        printf(COLOR_GREEN "[       OK ] " COLOR_RESET "%s.%s (%d ms)\n", suiteName, funcName, 0);
+    }
+}
+
+
