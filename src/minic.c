@@ -1,7 +1,7 @@
 #include "minic.h"
 #include <string.h>
 
-int failed = 0;
+bool failed = false;
 
 typedef struct {
     size_t count;

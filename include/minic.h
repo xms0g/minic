@@ -3,6 +3,7 @@
 
 #include <stddef.h>
 #include <math.h>
+#include <stdbool.h>
 #include <stdlib.h>
 #include <stdio.h>
 
@@ -13,12 +14,12 @@
 #define COLOR_RED     "\033[31m"
 #define COLOR_RESET   "\033[0m"
 
-extern int failed;
+extern bool failed;
 
 #define EXPECT_FLOAT_EQ(actual, expected) \
     do { \
         if (fabsf((actual) - (expected)) > MT_EPSILON_FLOAT) { \
-            ++failed; \
+            failed = true; \
             printf("%s:%d: " COLOR_RED"Failure\n" COLOR_RESET"Got %.9g, expected %.9g\n", \
                 __FILE__, __LINE__, actual, expected); \
         } \
@@ -27,7 +28,7 @@ extern int failed;
 #define EXPECT_DOUBLE_EQ(actual, expected) \
     do { \
         if (fabs((actual) - (expected)) > MT_EPSILON_DOUBLE) { \
-            ++failed; \
+            failed = true; \
             printf("%s:%d: " COLOR_RED"Failure\n" COLOR_RESET"Got %.17g, expected %.17g\n", \
                 __FILE__, __LINE__, actual, expected); \
         } \
