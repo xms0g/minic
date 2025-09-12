@@ -8,36 +8,36 @@
 
 #define MT_EPSILON 0.000001
 
-#define PRINT_RESULT(expected, result, func_name, state) \
-    do { \
-        printf("==============================================|\n"); \
-        printf("| %-8s | %-8s | %-12s | %s |\n", "Expected", "Result", "Function Name", "State"); \
-        printf("| %8.3f | %8.3f | %-13s | %s|\n",expected, result, func_name, state); \
-        printf("==============================================|\n"); \
-    } while (0)
+#define COLOR_GREEN   "\033[32m"
+#define COLOR_RED     "\033[31m"
+#define COLOR_RESET   "\033[0m"
 
 #define EXPECT_FLOAT_EQ(result, expected, func_name) \
     do { \
+        printf(COLOR_GREEN"[ RUN      ] " COLOR_RESET"%s\n", func_name); \
         if (fabsf((result) - (expected)) >= MT_EPSILON) { \
-            PRINT_RESULT(expected, result, func_name, "failed"); \
+            printf(COLOR_RED "[  FAILED  ] " COLOR_RESET "%s (%d ms)\n", func_name, 0); \
+            return 1;\
         } else { \
-            PRINT_RESULT(expected, result, func_name, "passed"); \
+            printf(COLOR_GREEN "[       OK ] " COLOR_RESET "%s (%d ms)\n", func_name, 0); \
+            return 0;\
         } \
     } while (0)
 
 #define EXPECT_DOUBLE_EQ(result, expected, func_name) \
     do { \
+        printf(COLOR_GREEN"[ RUN      ] " COLOR_RESET"%s\n", func_name); \
         if (fabs((result) - (expected)) >= MT_EPSILON) { \
-            PRINT_RESULT(expected, result, func_name, "failed"); \
+            printf(COLOR_RED "[  FAILED  ] " COLOR_RESET "%s (%d ms)\n", func_name, 0); \
         } else { \
-            PRINT_RESULT(expected, result, func_name, "passed"); \
+            printf(COLOR_GREEN "[       OK ] " COLOR_RESET "%s (%d ms)\n", func_name, 0); \
         } \
     } while (0)
 
 #define TEST_FUNC_NAME(name) test_##name
-#define TEST_FUNC(name) void TEST_FUNC_NAME(name)()
+#define TEST_FUNC(name) int TEST_FUNC_NAME(name)()
 
-typedef void (* test_func)();
+typedef int (* test_func)();
 
 typedef struct {
     struct {
