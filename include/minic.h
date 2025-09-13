@@ -15,8 +15,6 @@
 #define COLOR_RED     "\033[31m"
 #define COLOR_RESET   "\033[0m"
 
-extern bool failed;
-
 /* Boolean Conditions */
 
 #define EXPECT_TRUE(condition) \
@@ -41,7 +39,7 @@ extern bool failed;
         if ((condition)) { \
             failed = true; \
             printf("%s:%d: " COLOR_RED"Failure\n" COLOR_RESET \
-                " Actual:    true" \
+                " Actual:    true\n" \
                 " Expected:  false\n", \
                 __FILE__, __LINE__); \
         } \
@@ -60,7 +58,7 @@ extern bool failed;
         if ((actual) != (expected)) { \
             failed = true; \
             printf("%s:%d: " COLOR_RED"Failure\n" COLOR_RESET \
-                " Actual:    %d" \
+                " Actual:    %d\n" \
                 " Expected:  %d\n", \
                 __FILE__, __LINE__, actual, expected); \
         } \
@@ -77,7 +75,7 @@ extern bool failed;
         if ((actual) == (expected)) { \
             failed = true; \
             printf("%s:%d: " COLOR_RED"Failure\n" COLOR_RESET \
-                " Actual:   %d" \
+                " Actual:   %d\n" \
                 " Expected: not %d\n", \
                 __FILE__, __LINE__, actual, expected); \
         } \
@@ -94,7 +92,7 @@ extern bool failed;
         if ((actual) >= (expected)) { \
             failed = true; \
             printf("%s:%d: " COLOR_RED"Failure\n" COLOR_RESET \
-                " Actual: %d" \
+                " Actual: %d\n" \
                 " Expected: less than %d\n", \
                 __FILE__, __LINE__, actual, expected); \
         } \
@@ -111,7 +109,7 @@ extern bool failed;
         if ((actual) > (expected)) { \
             failed = true; \
             printf("%s:%d: " COLOR_RED"Failure\n" COLOR_RESET \
-                " Actual: %d" \
+                " Actual: %d\n" \
                 " Expected: less than or equal to %d\n", \
                 __FILE__, __LINE__, actual, expected); \
         } \
@@ -128,7 +126,7 @@ extern bool failed;
         if ((actual) <= (expected)) { \
             failed = true; \
             printf("%s:%d: " COLOR_RED"Failure\n" COLOR_RESET \
-                " Actual: %d" \
+                " Actual: %d\n" \
                 " Expected: greater than %d\n", \
                 __FILE__, __LINE__, actual, expected); \
         } \
@@ -145,7 +143,7 @@ extern bool failed;
         if ((actual) < (expected)) { \
             failed = true; \
             printf("%s:%d: " COLOR_RED"Failure\n" COLOR_RESET \
-                " Actual: %d" \
+                " Actual: %d\n" \
                 " Expected: greater than or equal to %d\n", \
                 __FILE__, __LINE__, actual, expected); \
         } \
@@ -164,7 +162,7 @@ extern bool failed;
         if (strcmp((actual), (expected)) != 0) { \
             failed = true; \
             printf("%s:%d: " COLOR_RED"Failure\n" COLOR_RESET \
-                " Actual:   %s" \
+                " Actual:   %s\n" \
                 " Expected: %s\n", \
                 __FILE__, __LINE__, actual, expected); \
         } \
@@ -181,7 +179,7 @@ extern bool failed;
         if (strcmp((actual), (expected)) == 0) { \
             failed = true; \
             printf("%s:%d: " COLOR_RED"Failure\n" COLOR_RESET \
-                " Actual: %s" \
+                " Actual: %s\n" \
                 " Expected: not %s\n", \
                 __FILE__, __LINE__, actual, expected); \
         } \
@@ -198,7 +196,7 @@ extern bool failed;
         if (strcasecmp((actual), (expected)) != 0) { \
             failed = true; \
             printf("%s:%d: " COLOR_RED"Failure\n" COLOR_RESET \
-                " Actual:   %s" \
+                " Actual:   %s\n" \
                 " Expected: %s\n", \
                 __FILE__, __LINE__, actual, expected); \
         } \
@@ -215,7 +213,7 @@ extern bool failed;
         if (strcasecmp((actual), (expected)) == 0) { \
             failed = true; \
             printf("%s:%d: " COLOR_RED"Failure\n" COLOR_RESET \
-                " Actual: %s" \
+                " Actual: %s\n" \
                 " Expected: not %s\n", \
                 __FILE__, __LINE__, actual, expected); \
         } \
@@ -265,6 +263,8 @@ extern bool failed;
 
 #define TEST_FUNC_NAME(name) test_##name
 #define TEST_FUNC(name) void TEST_FUNC_NAME(name)()
+
+extern bool failed;
 
 typedef void (* TestFuncPtr)();
 
