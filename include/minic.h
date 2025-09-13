@@ -140,6 +140,8 @@ extern bool failed;
         if ((actual) < (expected)) return; \
     } while (0)
 
+/* Floating-Point Comparison  */
+
 #define EXPECT_FLOAT_EQ(actual, expected) \
     do { \
         if (fabsf((actual) - (expected)) > MT_EPSILON_FLOAT) { \
@@ -149,6 +151,12 @@ extern bool failed;
         } \
     } while (0)
 
+#define ASSERT_FLOAT_EQ(actual, expected) \
+    do { \
+        EXPECT_FLOAT_EQ(actual, expected); \
+        if (fabsf((actual) - (expected)) > MT_EPSILON_FLOAT) return; \
+    } while (0)
+
 #define EXPECT_DOUBLE_EQ(actual, expected) \
     do { \
         if (fabs((actual) - (expected)) > MT_EPSILON_DOUBLE) { \
@@ -156,6 +164,12 @@ extern bool failed;
             printf("%s:%d: " COLOR_RED"Failure\n" COLOR_RESET"Got %.17g, expected %.17g\n", \
                 __FILE__, __LINE__, actual, expected); \
         } \
+    } while (0)
+
+#define ASSERT_DOUBLE_EQ(actual, expected) \
+    do { \
+        EXPECT_DOUBLE_EQ(actual, expected); \
+        if (fabs((actual) - (expected)) > MT_EPSILON_DOUBLE) return; \
     } while (0)
 
 #define TEST_FUNC_NAME(name) test_##name
