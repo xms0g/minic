@@ -57,10 +57,100 @@ int main() {
 [  PASSED  ] 2 tests.
 ```
 ## Assertions
+### Boolean Conditions
+**EXPECT_TRUE**
+
+`EXPECT_TRUE(condition)`
+`ASSERT_TRUE(condition)`
+
+- Verifies that condition is true.
+
+**EXPECT_FALSE**
+
+`EXPECT_FALSE(condition)`
+`ASSERT_FALSE(condition)`
+
+- Verifies that condition is false.
+
+### Binary Comparison
+**EXPECT_EQ**
+
+`EXPECT_EQ(val1, val2)`
+`ASSERT_EQ(val1, val2)`
+
+- Verifies that val1 == val2.
+
+**EXPECT_NE**
+
+`EXPECT_NE(val1, val2)`
+`ASSERT_NE(val1, val2)`
+
+- Verifies that val1 != val2.
+
+**EXPECT_LT**
+
+`EXPECT_LT(val1, val2)`
+`ASSERT_LT(val1, val2)`
+
+- Verifies that val1 < val2.
+
+**EXPECT_LE**
+
+`EXPECT_LE(val1, val2)`
+`ASSERT_LE(val1, val2)`
+
+- Verifies that val1 <= val2.
+
+**EXPECT_GT**
+
+`EXPECT_GT(val1, val2)`
+`ASSERT_GT(val1, val2)`
+
+- Verifies that val1 > val2.
+
+**EXPECT_GE**
+
+`EXPECT_GE(val1, val2)`
+`ASSERT_GE(val1, val2)`
+
+- Verifies that val1 >= val2.
+
+### String Comparison
+**EXPECT_STREQ**
+
+`EXPECT_STREQ(str1,str2)`
+`ASSERT_STREQ(str1,str2)`
+
+- Verifies that the two C strings str1 and str2 have the same contents.
+
+**EXPECT_STRNE**
+
+`EXPECT_STRNE(str1,str2)`
+`ASSERT_STRNE(str1,str2)`
+
+- Verifies that the two C strings str1 and str2 have different contents.
+
+**EXPECT_STRCASEEQ**
+
+`EXPECT_STRCASEEQ(str1,str2)`
+`ASSERT_STRCASEEQ(str1,str2)`
+
+- Verifies that the two C strings str1 and str2 have the same contents, ignoring case.
+
+**EXPECT_STRCASENE**
+
+`EXPECT_STRCASENE(str1,str2)`
+`ASSERT_STRCASENE(str1,str2)`
+
+### Floating-Point Comparison
 `EXPECT_FLOAT_EQ(actual, expected)`
+`ASSERT_FLOAT_EQ(actual, expected)`
+
 - Compares two floats with tolerance (1e-4f by default).
 
 `EXPECT_DOUBLE_EQ(actual, expected)`
+`ASSERT_DOUBLE_EQ(actual, expected)`
+
 - Compares two doubles with tolerance (1e-12 by default).
 
 On failure, both actual and expected values are printed, along with file and line:
