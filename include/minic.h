@@ -16,6 +16,8 @@
 
 extern bool failed;
 
+/* Boolean Conditions */
+
 #define EXPECT_TRUE(condition) \
     do { \
         if (!(condition)) { \
@@ -28,7 +30,7 @@ extern bool failed;
 #define ASSERT_TRUE(condition) \
     do { \
         EXPECT_TRUE(condition); \
-        return; \
+        if (!(condition)) return; \
     } while (0)
 
 #define EXPECT_FALSE(condition) \
@@ -43,7 +45,99 @@ extern bool failed;
 #define ASSERT_FALSE(condition) \
     do { \
         EXPECT_FALSE(condition); \
-        return; \
+        if ((condition)) return; \
+    } while (0)
+
+/* Binary Comparison */
+
+#define EXPECT_EQ(actual, expected) \
+    do { \
+        if ((actual) != (expected)) { \
+            failed = true; \
+            printf("%s:%d: " COLOR_RED"Failure\n" COLOR_RESET"Got %d, expected %d\n", \
+                __FILE__, __LINE__, actual, expected); \
+        } \
+    } while (0)
+
+#define ASSERT_EQ(actual, expected) \
+    do { \
+        EXPECT_EQ(actual, expected); \
+        if ((actual) != (expected)) return; \
+    } while (0)
+
+#define EXPECT_NE(actual, expected) \
+    do { \
+        if ((actual) == (expected)) { \
+            failed = true; \
+            printf("%s:%d: " COLOR_RED"Failure\n" COLOR_RESET"Got %d, expected not %d\n", \
+                __FILE__, __LINE__, actual, expected); \
+        } \
+    } while (0)
+
+#define ASSERT_NE(actual, expected) \
+    do { \
+        EXPECT_NE(actual, expected); \
+        if ((actual) == (expected)) return; \
+    } while (0)
+
+#define EXPECT_LT(actual, expected) \
+    do { \
+        if ((actual) >= (expected)) { \
+            failed = true; \
+            printf("%s:%d: " COLOR_RED"Failure\n" COLOR_RESET"Got %d, expected less than %d\n", \
+                __FILE__, __LINE__, actual, expected); \
+        } \
+    } while (0)
+
+#define ASSERT_LT(actual, expected) \
+    do { \
+        EXPECT_LT(actual, expected); \
+        if ((actual) >= (expected)) return; \
+    } while (0)
+
+#define EXPECT_LE(actual, expected) \
+    do { \
+        if ((actual) > (expected)) { \
+            failed = true; \
+            printf("%s:%d: " COLOR_RED"Failure\n" COLOR_RESET"Got %d, expected less than or equal to %d\n", \
+                __FILE__, __LINE__, actual, expected); \
+        } \
+    } while (0)
+
+#define ASSERT_LE(actual, expected) \
+    do { \
+        EXPECT_LE(actual, expected); \
+        if ((actual) > (expected)) return; \
+    } while (0)
+
+#define EXPECT_GT(actual, expected) \
+    do { \
+        if ((actual) <= (expected)) { \
+            failed = true; \
+            printf("%s:%d: " COLOR_RED"Failure\n" COLOR_RESET"Got %d, expected greater than %d\n", \
+                __FILE__, __LINE__, actual, expected); \
+        } \
+    } while (0)
+
+#define ASSERT_GT(actual, expected) \
+    do { \
+        EXPECT_GT(actual, expected); \
+        if ((actual) <= (expected)) return; \
+    } while (0)
+
+#define EXPECT_GE(actual, expected) \
+    do { \
+        if ((actual) < (expected)) { \
+            failed = true; \
+            printf("%s:%d: " COLOR_RED"Failure\n" COLOR_RESET"Got %d, expected greater than or equal to %d\n", \
+                __FILE__, __LINE__, actual, expected); \
+        } \
+    } while (0)
+
+#define ASSERT_GE(actual, expected) \
+    do { \
+        EXPECT_GE(actual, expected); \
+        if ((actual) < (expected)) return; \
     } while (0)
 
 #define EXPECT_FLOAT_EQ(actual, expected) \
