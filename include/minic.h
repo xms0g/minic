@@ -1,5 +1,5 @@
-#ifndef MT_H
-#define MT_H
+#ifndef MINIC_H
+#define MINIC_H
 
 #include <stddef.h>
 #include <math.h>
@@ -15,6 +15,36 @@
 #define COLOR_RESET   "\033[0m"
 
 extern bool failed;
+
+#define EXPECT_TRUE(condition) \
+    do { \
+        if (!(condition)) { \
+            failed = true; \
+            printf("%s:%d: " COLOR_RED"Failure\n" COLOR_RESET"Got false, expected true\n", \
+                __FILE__, __LINE__); \
+        } \
+    } while (0)
+
+#define ASSERT_TRUE(condition) \
+    do { \
+        EXPECT_TRUE(condition); \
+        return; \
+    } while (0)
+
+#define EXPECT_FALSE(condition) \
+    do { \
+        if ((condition)) { \
+            failed = true; \
+            printf("%s:%d: " COLOR_RED"Failure\n" COLOR_RESET"Got true, expected false\n", \
+                __FILE__, __LINE__); \
+        } \
+    } while (0)
+
+#define ASSERT_FALSE(condition) \
+    do { \
+        EXPECT_FALSE(condition); \
+        return; \
+    } while (0)
 
 #define EXPECT_FLOAT_EQ(actual, expected) \
     do { \
