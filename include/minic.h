@@ -23,7 +23,9 @@ extern bool failed;
     do { \
         if (!(condition)) { \
             failed = true; \
-            printf("%s:%d: " COLOR_RED"Failure\n" COLOR_RESET"Got false, expected true\n", \
+            printf("%s:%d: " COLOR_RED"Failure\n" COLOR_RESET \
+                " Actual:    false\n" \
+                " Expected:  true\n", \
                 __FILE__, __LINE__); \
         } \
     } while (0)
@@ -38,7 +40,9 @@ extern bool failed;
     do { \
         if ((condition)) { \
             failed = true; \
-            printf("%s:%d: " COLOR_RED"Failure\n" COLOR_RESET"Got true, expected false\n", \
+            printf("%s:%d: " COLOR_RED"Failure\n" COLOR_RESET \
+                " Actual:    true" \
+                " Expected:  false\n", \
                 __FILE__, __LINE__); \
         } \
     } while (0)
@@ -55,7 +59,9 @@ extern bool failed;
     do { \
         if ((actual) != (expected)) { \
             failed = true; \
-            printf("%s:%d: " COLOR_RED"Failure\n" COLOR_RESET"Got %d, expected %d\n", \
+            printf("%s:%d: " COLOR_RED"Failure\n" COLOR_RESET \
+                " Actual:    %d" \
+                " Expected:  %d\n", \
                 __FILE__, __LINE__, actual, expected); \
         } \
     } while (0)
@@ -70,7 +76,9 @@ extern bool failed;
     do { \
         if ((actual) == (expected)) { \
             failed = true; \
-            printf("%s:%d: " COLOR_RED"Failure\n" COLOR_RESET"Got %d, expected not %d\n", \
+            printf("%s:%d: " COLOR_RED"Failure\n" COLOR_RESET \
+                " Actual:   %d" \
+                " Expected: not %d\n", \
                 __FILE__, __LINE__, actual, expected); \
         } \
     } while (0)
@@ -85,7 +93,9 @@ extern bool failed;
     do { \
         if ((actual) >= (expected)) { \
             failed = true; \
-            printf("%s:%d: " COLOR_RED"Failure\n" COLOR_RESET"Got %d, expected less than %d\n", \
+            printf("%s:%d: " COLOR_RED"Failure\n" COLOR_RESET \
+                " Actual: %d" \
+                " Expected: less than %d\n", \
                 __FILE__, __LINE__, actual, expected); \
         } \
     } while (0)
@@ -100,7 +110,9 @@ extern bool failed;
     do { \
         if ((actual) > (expected)) { \
             failed = true; \
-            printf("%s:%d: " COLOR_RED"Failure\n" COLOR_RESET"Got %d, expected less than or equal to %d\n", \
+            printf("%s:%d: " COLOR_RED"Failure\n" COLOR_RESET \
+                " Actual: %d" \
+                " Expected: less than or equal to %d\n", \
                 __FILE__, __LINE__, actual, expected); \
         } \
     } while (0)
@@ -115,7 +127,9 @@ extern bool failed;
     do { \
         if ((actual) <= (expected)) { \
             failed = true; \
-            printf("%s:%d: " COLOR_RED"Failure\n" COLOR_RESET"Got %d, expected greater than %d\n", \
+            printf("%s:%d: " COLOR_RED"Failure\n" COLOR_RESET \
+                " Actual: %d" \
+                " Expected: greater than %d\n", \
                 __FILE__, __LINE__, actual, expected); \
         } \
     } while (0)
@@ -130,7 +144,9 @@ extern bool failed;
     do { \
         if ((actual) < (expected)) { \
             failed = true; \
-            printf("%s:%d: " COLOR_RED"Failure\n" COLOR_RESET"Got %d, expected greater than or equal to %d\n", \
+            printf("%s:%d: " COLOR_RED"Failure\n" COLOR_RESET \
+                " Actual: %d" \
+                " Expected: greater than or equal to %d\n", \
                 __FILE__, __LINE__, actual, expected); \
         } \
     } while (0)
@@ -147,7 +163,9 @@ extern bool failed;
     do { \
         if (strcmp((actual), (expected)) != 0) { \
             failed = true; \
-            printf("%s:%d: " COLOR_RED"Failure\n" COLOR_RESET"Got %s, expected %s\n", \
+            printf("%s:%d: " COLOR_RED"Failure\n" COLOR_RESET \
+                " Actual:   %s" \
+                " Expected: %s\n", \
                 __FILE__, __LINE__, actual, expected); \
         } \
     } while (0)
@@ -162,7 +180,9 @@ extern bool failed;
     do { \
         if (strcmp((actual), (expected)) == 0) { \
             failed = true; \
-            printf("%s:%d: " COLOR_RED"Failure\n" COLOR_RESET"Got %s, expected not %s\n", \
+            printf("%s:%d: " COLOR_RED"Failure\n" COLOR_RESET \
+                " Actual: %s" \
+                " Expected: not %s\n", \
                 __FILE__, __LINE__, actual, expected); \
         } \
     } while (0)
@@ -177,8 +197,10 @@ extern bool failed;
     do { \
         if (strcasecmp((actual), (expected)) != 0) { \
             failed = true; \
-            printf("%s:%d: " COLOR_RED"Failure\n" COLOR_RESET"Got %s, expected %s\n", \
-            __FILE__, __LINE__, actual, expected); \
+            printf("%s:%d: " COLOR_RED"Failure\n" COLOR_RESET \
+                " Actual:   %s" \
+                " Expected: %s\n", \
+                __FILE__, __LINE__, actual, expected); \
         } \
     } while (0)
 
@@ -192,8 +214,10 @@ extern bool failed;
     do { \
         if (strcasecmp((actual), (expected)) == 0) { \
             failed = true; \
-            printf("%s:%d: " COLOR_RED"Failure\n" COLOR_RESET"Got %s, expected not %s\n", \
-            __FILE__, __LINE__, actual, expected); \
+            printf("%s:%d: " COLOR_RED"Failure\n" COLOR_RESET \
+                " Actual: %s" \
+                " Expected: not %s\n", \
+                __FILE__, __LINE__, actual, expected); \
         } \
     } while (0)
 
@@ -209,7 +233,9 @@ extern bool failed;
     do { \
         if (fabsf((actual) - (expected)) > MT_EPSILON_FLOAT) { \
             failed = true; \
-            printf("%s:%d: " COLOR_RED"Failure\n" COLOR_RESET"Got %.9g, expected %.9g\n", \
+            printf("%s:%d: " COLOR_RED"Failure\n" COLOR_RESET \
+                " Actual:   %.9g\n" \
+                " Expected: %.9g\n", \
                 __FILE__, __LINE__, actual, expected); \
         } \
     } while (0)
@@ -224,7 +250,9 @@ extern bool failed;
     do { \
         if (fabs((actual) - (expected)) > MT_EPSILON_DOUBLE) { \
             failed = true; \
-            printf("%s:%d: " COLOR_RED"Failure\n" COLOR_RESET"Got %.17g, expected %.17g\n", \
+            printf("%s:%d: " COLOR_RED"Failure\n" COLOR_RESET \
+                " Actual:   %.17g\n" \
+                " Expected: %.17g\n", \
                 __FILE__, __LINE__, actual, expected); \
         } \
     } while (0)
