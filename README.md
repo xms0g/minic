@@ -58,7 +58,7 @@ int main() {
 ```
 ## Assertions
 `EXPECT_FLOAT_EQ(actual, expected)`
-- Compares two floats with tolerance (1e-6f by default).
+- Compares two floats with tolerance (1e-4f by default).
 
 `EXPECT_DOUBLE_EQ(actual, expected)`
 - Compares two doubles with tolerance (1e-12 by default).
