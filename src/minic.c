@@ -1,5 +1,4 @@
 #include "minic.h"
-#include <string.h>
 
 bool failed = false;
 

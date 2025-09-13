@@ -5,6 +5,7 @@
 #include <math.h>
 #include <stdbool.h>
 #include <stdlib.h>
+#include <string.h>
 #include <stdio.h>
 
 #define MT_EPSILON_FLOAT 1e-4f
@@ -138,6 +139,68 @@ extern bool failed;
     do { \
         EXPECT_GE(actual, expected); \
         if ((actual) < (expected)) return; \
+    } while (0)
+
+/* String Comparison */
+
+#define EXPECT_STREQ(actual, expected) \
+    do { \
+        if (strcmp((actual), (expected)) != 0) { \
+            failed = true; \
+            printf("%s:%d: " COLOR_RED"Failure\n" COLOR_RESET"Got %s, expected %s\n", \
+                __FILE__, __LINE__, actual, expected); \
+        } \
+    } while (0)
+
+#define ASSERT_STREQ(actual, expected) \
+    do { \
+        EXPECT_STREQ(actual, expected); \
+        if (strcmp((actual), (expected)) != 0) return; \
+    } while (0)
+
+#define EXPECT_STRNE(actual, expected) \
+    do { \
+        if (strcmp((actual), (expected)) == 0) { \
+            failed = true; \
+            printf("%s:%d: " COLOR_RED"Failure\n" COLOR_RESET"Got %s, expected not %s\n", \
+                __FILE__, __LINE__, actual, expected); \
+        } \
+    } while (0)
+
+#define ASSERT_STRNE(actual, expected) \
+    do { \
+        EXPECT_STRNE(actual, expected); \
+        if (strcmp((actual), (expected)) == 0) return; \
+    } while (0)
+
+#define EXPECT_STRCASEEQ(actual, expected) \
+    do { \
+        if (strcasecmp((actual), (expected)) != 0) { \
+            failed = true; \
+            printf("%s:%d: " COLOR_RED"Failure\n" COLOR_RESET"Got %s, expected %s\n", \
+            __FILE__, __LINE__, actual, expected); \
+        } \
+    } while (0)
+
+#define ASSERT_STRCASEEQ(actual, expected) \
+    do { \
+        EXPECT_STRCASEEQ(actual, expected); \
+        if (strcasecmp((actual), (expected)) != 0) return; \
+    } while (0)
+
+#define EXPECT_STRCASENE(actual, expected) \
+    do { \
+        if (strcasecmp((actual), (expected)) == 0) { \
+            failed = true; \
+            printf("%s:%d: " COLOR_RED"Failure\n" COLOR_RESET"Got %s, expected not %s\n", \
+            __FILE__, __LINE__, actual, expected); \
+        } \
+    } while (0)
+
+#define ASSERT_STRCASENE(actual, expected) \
+    do { \
+        EXPECT_STRCASENE(actual, expected); \
+        if (strcasecmp((actual), (expected)) == 0) return; \
     } while (0)
 
 /* Floating-Point Comparison  */
