@@ -1,4 +1,5 @@
 #include "minic.h"
+#include <time.h>
 
 bool failed = false;
 
@@ -13,11 +14,15 @@ typedef struct {
 static MTRegistry registry;
 
 static void printHeader(size_t testCount, size_t suiteCount);
-static void printFooter(size_t testCount, size_t suiteCount);
+static void printFooter(size_t testCount, size_t suiteCount, double ms);
 static void printSuiteStart(const char* name, size_t count);
-static void printSuiteEnd(const char* name, size_t count, int ms);
+static void printSuiteEnd(const char* name, size_t count, double ms);
 static void printTestStart(const char* suiteName, const char* funcName);
-static void printTestEnd(const char* suiteName, const char* funcName);
+static void printTestEnd(const char* suiteName, const char* funcName, double ms);
+
+static double now() {
+    return (double)clock() / CLOCKS_PER_SEC * 1e6;
+}
 
 void mtInitRegistry() {
     registry.failedCount = 0;
@@ -28,25 +33,33 @@ void mtInitRegistry() {
 }
 
 void mtRunAllTests() {
+    double totalTime = 0;
     printHeader(registry.totalTestCount, registry.count);
 
     for (size_t i = 0; i < registry.count; i++) {
         const MTSuite currentSuite = registry.suites[i];
+        double suiteTime = 0;
 
         printSuiteStart(currentSuite.name, currentSuite.count);
         for (size_t j = 0; j < currentSuite.count; j++) {
             const TestFunc* func = &currentSuite.cases[j];
 
             printTestStart(currentSuite.name, func->name);
-            func->callback();
-            printTestEnd(currentSuite.name, func->name);
+            const double fs = now();
+            func->ptr();
+            const double fe = now();
+            suiteTime += fe - fs;
+            printTestEnd(currentSuite.name, func->name, fe - fs);
         }
-        printSuiteEnd(currentSuite.name, currentSuite.count, 0);
+        totalTime += suiteTime;
+        printSuiteEnd(currentSuite.name, currentSuite.count, suiteTime);
     }
-    printFooter(registry.totalTestCount, registry.count);
+    printFooter(registry.totalTestCount, registry.count, totalTime);
 }
 
 void mtRunSuiteTests(const char* name) {
+    double suiteTime = 0;
+
     for (size_t i = 0; i < registry.count; i++) {
         const MTSuite currentSuite = registry.suites[i];
 
@@ -59,11 +72,14 @@ void mtRunSuiteTests(const char* name) {
             const TestFunc* func = &currentSuite.cases[j];
 
             printTestStart(currentSuite.name, func->name);
-            func->callback();
-            printTestEnd(currentSuite.name, func->name);
+            const double fs = now();
+            func->ptr();
+            const double fe = now();
+            suiteTime += fe - fs;
+            printTestEnd(currentSuite.name, func->name, fe - fs);
         }
-        printSuiteEnd(currentSuite.name, currentSuite.count, 0);
-        printFooter(currentSuite.count, 1);
+        printSuiteEnd(currentSuite.name, currentSuite.count, suiteTime);
+        printFooter(currentSuite.count, 1, suiteTime);
         break;
     }
 }
@@ -124,10 +140,10 @@ static void printHeader(const size_t testCount, const size_t suiteCount) {
     printf(COLOR_GREEN "[----------] " COLOR_RESET "Global test environment set-up.\n");
 }
 
-static void printFooter(const size_t testCount, const size_t suiteCount) {
+static void printFooter(const size_t testCount, const size_t suiteCount, const double ms) {
     printf(COLOR_GREEN"[----------] " COLOR_RESET"Global test environment tear-down.\n");
-    printf(COLOR_GREEN"[==========] " COLOR_RESET"%lu tests from %lu test suites ran. (%d ms total)\n",
-           testCount, suiteCount, 0);
+    printf(COLOR_GREEN"[==========] " COLOR_RESET"%lu tests from %lu test suites ran. (%.2f ms total)\n",
+           testCount, suiteCount, ms);
 
     if (registry.failedCount == 0) {
         printf(COLOR_GREEN "[  PASSED  ] " COLOR_RESET "%lu tests.\n", testCount);
@@ -141,22 +157,22 @@ static void printSuiteStart(const char* name, const size_t count) {
     printf(COLOR_GREEN"[----------] " COLOR_RESET"%lu tests from %s\n", count, name);
 }
 
-static void printSuiteEnd(const char* name, const size_t count, const int ms) {
-    printf(COLOR_GREEN"[----------] " COLOR_RESET"%lu tests from %s (%d ms total)\n\n", count, name, ms);
+static void printSuiteEnd(const char* name, const size_t count, const double ms) {
+    printf(COLOR_GREEN"[----------] " COLOR_RESET"%lu tests from %s (%.2f ms total)\n\n", count, name, ms);
 }
 
 static void printTestStart(const char* suiteName, const char* funcName) {
     printf(COLOR_GREEN"[ RUN      ] " COLOR_RESET"%s.%s\n", suiteName, funcName);
 }
 
-static void printTestEnd(const char* suiteName, const char* funcName) {
+static void printTestEnd(const char* suiteName, const char* funcName, const double ms) {
     if (failed) {
         failed = false;
         registry.failedCount++;
 
-        printf(COLOR_RED "[  FAILED  ] " COLOR_RESET "%s.%s (%d ms)\n", suiteName, funcName, 0);
+        printf(COLOR_RED "[  FAILED  ] " COLOR_RESET "%s.%s (%.2f ms)\n", suiteName, funcName, ms);
     } else {
-        printf(COLOR_GREEN "[       OK ] " COLOR_RESET "%s.%s (%d ms)\n", suiteName, funcName, 0);
+        printf(COLOR_GREEN "[       OK ] " COLOR_RESET "%s.%s (%.2f ms)\n", suiteName, funcName, ms);
     }
 }
 

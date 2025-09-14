@@ -270,7 +270,7 @@ typedef void (* TestFuncPtr)();
 
 typedef struct {
     const char* name;
-    TestFuncPtr callback;
+    TestFuncPtr ptr;
 } TestFunc;
 
 typedef struct {
