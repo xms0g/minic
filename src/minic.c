@@ -125,7 +125,7 @@ void mtAddTest(MTSuite* suite, const char* name, const TestFuncPtr func) {
         }
     }
 
-    suite->cases[suite->count++] = (TestFunc){name, func};
+    suite->cases[suite->count++] = (TestFunc){.name = name, .ptr = func};
     registry.totalTestCount++;
 }
 
