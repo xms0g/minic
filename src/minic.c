@@ -21,7 +21,9 @@ static void printTestStart(const char* suiteName, const char* funcName);
 static void printTestEnd(const char* suiteName, const char* funcName, double ms);
 
 static double now() {
-    return (double)clock() / CLOCKS_PER_SEC * 1e6;
+    struct timespec ts;
+    timespec_get(&ts, TIME_UTC);
+    return ts.tv_sec * 1e6 + ts.tv_nsec / 1e3;
 }
 
 void mtInitRegistry() {
