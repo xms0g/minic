@@ -137,22 +137,28 @@ void mtCleanupRegistry() {
 }
 
 static void printHeader(const size_t testCount, const size_t suiteCount) {
-    printf(COLOR_GREEN "[==========] " COLOR_RESET "Running %lu tests from %lu test suites.\n",
-           testCount, suiteCount);
-    printf(COLOR_GREEN "[----------] " COLOR_RESET "Global test environment set-up.\n");
+    printf(
+        COLOR_GREEN "[==========] " COLOR_RESET "Running %lu tests from %lu test suites.\n"
+        COLOR_GREEN "[----------] " COLOR_RESET "Global test environment set-up.\n",
+        testCount, suiteCount);
 }
 
 static void printFooter(const size_t testCount, const size_t suiteCount, const double ms) {
-    printf(COLOR_GREEN"[----------] " COLOR_RESET"Global test environment tear-down.\n");
-    printf(COLOR_GREEN"[==========] " COLOR_RESET"%lu tests from %lu test suites ran. (%.2f ms total)\n",
-           testCount, suiteCount, ms);
+    printf(
+        COLOR_GREEN"[----------] " COLOR_RESET"Global test environment tear-down.\n"
+        COLOR_GREEN"[==========] " COLOR_RESET"%lu tests from %lu test suites ran. (%.2f ms total)\n",
+        testCount, suiteCount, ms);
 
+#define TEST_RESULT(status) status COLOR_RESET "%lu tests.\n"
     if (registry.failedCount == 0) {
-        printf(COLOR_GREEN "[  PASSED  ] " COLOR_RESET "%lu tests.\n", testCount);
+        printf(TEST_RESULT(COLOR_GREEN "[  PASSED  ] "), testCount);
     } else {
-        printf(COLOR_GREEN "[  PASSED  ] " COLOR_RESET "%lu tests.\n", testCount - registry.failedCount);
-        printf(COLOR_RED "[  FAILED  ] " COLOR_RESET "%lu tests.\n", registry.failedCount);
+        printf(
+            TEST_RESULT(COLOR_GREEN "[  PASSED  ] ")
+            TEST_RESULT(COLOR_RED "[  FAILED  ] "),
+            testCount - registry.failedCount, registry.failedCount);
     }
+#undef TEST_RESULT
 }
 
 static void printSuiteStart(const char* name, const size_t count) {
@@ -172,10 +178,12 @@ static void printTestEnd(const char* suiteName, const char* funcName, const doub
         failed = false;
         registry.failedCount++;
 
-        printf(COLOR_RED "[  FAILED  ] " COLOR_RESET "%s.%s (%.2f ms)\n", suiteName, funcName, ms);
+#define TEST_END(status) status COLOR_RESET "%s.%s (%.2f ms)\n"
+        printf(TEST_END(COLOR_RED "[  FAILED  ] "), suiteName, funcName, ms);
     } else {
-        printf(COLOR_GREEN "[       OK ] " COLOR_RESET "%s.%s (%.2f ms)\n", suiteName, funcName, ms);
+        printf(TEST_END(COLOR_GREEN "[       OK ] "), suiteName, funcName, ms);
     }
+#undef TEST_END
 }
 
 
