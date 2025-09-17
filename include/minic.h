@@ -34,7 +34,6 @@
     void *: "%p\n",                       \
     default: "%p\n")  /* fallback for anything else */
 
-
 #define PRINT_FAIL(actual, expected, op_str) \
     do { \
         printf("%s:%d: " COLOR_RED"Failure\n"COLOR_RESET" Actual: ", __FILE__, __LINE__); \
