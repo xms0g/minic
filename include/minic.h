@@ -15,16 +15,41 @@
 #define COLOR_RED     "\033[31m"
 #define COLOR_RESET   "\033[0m"
 
+#define type_fmt(x) _Generic((x),         \
+    unsigned char: "%c\n",                \
+    char: "%c\n",                         \
+    signed char: "%c\n",                  \
+    short int: "%hd\n",                   \
+    unsigned short int: "%hu\n",          \
+    int: "%d\n",                          \
+    unsigned int: "%u\n",                 \
+    long int: "%ld\n",                    \
+    unsigned long int: "%lu\n",           \
+    long long int: "%lld\n",              \
+    unsigned long long int: "%llu\n",     \
+    float: "%f\n",                        \
+    double: "%f\n",                       \
+    long double: "%Lf\n",                 \
+    char *: "%s\n",                       \
+    void *: "%p\n",                       \
+    default: "%p\n")  /* fallback for anything else */
+
+
+#define PRINT_FAIL(actual, expected, op_str) \
+    do { \
+        printf("%s:%d: " COLOR_RED"Failure\n"COLOR_RESET" Actual: ", __FILE__, __LINE__); \
+        printf(type_fmt(actual), actual); \
+        printf(" Expected: %s ", op_str); \
+        printf(type_fmt(expected), expected); \
+    } while (0)
+
 /* Boolean Conditions */
 
 #define EXPECT_TRUE(condition) \
     do { \
         if (!(condition)) { \
             failed = true; \
-            printf("%s:%d: " COLOR_RED"Failure\n" COLOR_RESET \
-                " Actual:    false\n" \
-                " Expected:  true\n", \
-                __FILE__, __LINE__); \
+            PRINT_FAIL("false", "true", ""); \
         } \
     } while (0)
 
@@ -38,10 +63,7 @@
     do { \
         if ((condition)) { \
             failed = true; \
-            printf("%s:%d: " COLOR_RED"Failure\n" COLOR_RESET \
-                " Actual:    true\n" \
-                " Expected:  false\n", \
-                __FILE__, __LINE__); \
+            PRINT_FAIL("true", "false", ""); \
         } \
     } while (0)
 
@@ -57,10 +79,7 @@
     do { \
         if ((actual) != (expected)) { \
             failed = true; \
-            printf("%s:%d: " COLOR_RED"Failure\n" COLOR_RESET \
-                " Actual:    %d\n" \
-                " Expected:  %d\n", \
-                __FILE__, __LINE__, actual, expected); \
+            PRINT_FAIL(actual, expected, ""); \
         } \
     } while (0)
 
@@ -74,10 +93,7 @@
     do { \
         if ((actual) == (expected)) { \
             failed = true; \
-            printf("%s:%d: " COLOR_RED"Failure\n" COLOR_RESET \
-                " Actual:   %d\n" \
-                " Expected: not %d\n", \
-                __FILE__, __LINE__, actual, expected); \
+            PRINT_FAIL(actual, expected, "not"); \
         } \
     } while (0)
 
@@ -91,10 +107,7 @@
     do { \
         if ((actual) >= (expected)) { \
             failed = true; \
-            printf("%s:%d: " COLOR_RED"Failure\n" COLOR_RESET \
-                " Actual: %d\n" \
-                " Expected: less than %d\n", \
-                __FILE__, __LINE__, actual, expected); \
+            PRINT_FAIL(actual, expected, "less than"); \
         } \
     } while (0)
 
@@ -108,10 +121,7 @@
     do { \
         if ((actual) > (expected)) { \
             failed = true; \
-            printf("%s:%d: " COLOR_RED"Failure\n" COLOR_RESET \
-                " Actual: %d\n" \
-                " Expected: less than or equal to %d\n", \
-                __FILE__, __LINE__, actual, expected); \
+            PRINT_FAIL(actual, expected, "less than or equal to"); \
         } \
     } while (0)
 
@@ -125,10 +135,7 @@
     do { \
         if ((actual) <= (expected)) { \
             failed = true; \
-            printf("%s:%d: " COLOR_RED"Failure\n" COLOR_RESET \
-                " Actual: %d\n" \
-                " Expected: greater than %d\n", \
-                __FILE__, __LINE__, actual, expected); \
+            PRINT_FAIL(actual, expected, "greater than"); \
         } \
     } while (0)
 
@@ -142,10 +149,7 @@
     do { \
         if ((actual) < (expected)) { \
             failed = true; \
-            printf("%s:%d: " COLOR_RED"Failure\n" COLOR_RESET \
-                " Actual: %d\n" \
-                " Expected: greater than or equal to %d\n", \
-                __FILE__, __LINE__, actual, expected); \
+            PRINT_FAIL(actual, expected, "greater than or equal to"); \
         } \
     } while (0)
 
@@ -161,10 +165,7 @@
     do { \
         if (strcmp((actual), (expected)) != 0) { \
             failed = true; \
-            printf("%s:%d: " COLOR_RED"Failure\n" COLOR_RESET \
-                " Actual:   %s\n" \
-                " Expected: %s\n", \
-                __FILE__, __LINE__, actual, expected); \
+            PRINT_FAIL(actual, expected, ""); \
         } \
     } while (0)
 
@@ -178,10 +179,7 @@
     do { \
         if (strcmp((actual), (expected)) == 0) { \
             failed = true; \
-            printf("%s:%d: " COLOR_RED"Failure\n" COLOR_RESET \
-                " Actual: %s\n" \
-                " Expected: not %s\n", \
-                __FILE__, __LINE__, actual, expected); \
+            PRINT_FAIL(actual, expected, "not"); \
         } \
     } while (0)
 
@@ -195,10 +193,7 @@
     do { \
         if (strcasecmp((actual), (expected)) != 0) { \
             failed = true; \
-            printf("%s:%d: " COLOR_RED"Failure\n" COLOR_RESET \
-                " Actual:   %s\n" \
-                " Expected: %s\n", \
-                __FILE__, __LINE__, actual, expected); \
+            PRINT_FAIL(actual, expected, ""); \
         } \
     } while (0)
 
@@ -212,10 +207,7 @@
     do { \
         if (strcasecmp((actual), (expected)) == 0) { \
             failed = true; \
-            printf("%s:%d: " COLOR_RED"Failure\n" COLOR_RESET \
-                " Actual: %s\n" \
-                " Expected: not %s\n", \
-                __FILE__, __LINE__, actual, expected); \
+            PRINT_FAIL(actual, expected, "not"); \
         } \
     } while (0)
 
@@ -231,10 +223,7 @@
     do { \
         if (fabsf((actual) - (expected)) > MT_EPSILON_FLOAT) { \
             failed = true; \
-            printf("%s:%d: " COLOR_RED"Failure\n" COLOR_RESET \
-                " Actual:   %.9g\n" \
-                " Expected: %.9g\n", \
-                __FILE__, __LINE__, actual, expected); \
+            PRINT_FAIL(actual, expected, ""); \
         } \
     } while (0)
 
@@ -248,10 +237,7 @@
     do { \
         if (fabs((actual) - (expected)) > MT_EPSILON_DOUBLE) { \
             failed = true; \
-            printf("%s:%d: " COLOR_RED"Failure\n" COLOR_RESET \
-                " Actual:   %.17g\n" \
-                " Expected: %.17g\n", \
-                __FILE__, __LINE__, actual, expected); \
+            PRINT_FAIL(actual, expected, ""); \
         } \
     } while (0)
 
