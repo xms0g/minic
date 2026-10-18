@@ -1,6 +1,6 @@
 # MiniC
 `minic` is a minimal unit testing framework for C, inspired by GoogleTest’s output style but built to be tiny, portable, and dependency-free.
-
+ 
 ## Features
 - **Lightweight** – just two files, drop into any C project.
 - **Pretty output** – colored console logs (green for success, red for failures).
