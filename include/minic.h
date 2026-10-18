@@ -251,30 +251,30 @@
 
 extern bool failed;
 
-typedef void (* TestFuncPtr)();
+typedef void (* test_func_ptr)();
 
 typedef struct {
     const char* name;
-    TestFuncPtr ptr;
-} TestFunc;
+    test_func_ptr ptr;
+} test_func;
 
 typedef struct {
     size_t count;
     size_t capacity;
-    TestFunc* cases;
+    test_func* cases;
     const char* name;
-} MTSuite;
+} minic_suite;
 
-void mtInitRegistry();
+void minic_init_registry();
 
-void mtRunAllTests();
+void minic_run_all_tests();
 
-void mtRunSuiteTests(const char* name);
+void minic_run_suite_tests(const char* name);
 
-MTSuite* mtAddSuite(const char* name);
+minic_suite* minic_add_suite(const char* name);
 
-void mtAddTest(MTSuite* suite, const char* name, TestFuncPtr func);
+void minic_add_test(minic_suite* suite, const char* name, test_func_ptr func);
 
-void mtCleanupRegistry();
+void minic_cleanup_registry();
 
 #endif

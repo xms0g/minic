@@ -30,14 +30,14 @@ TEST_FUNC(addd) {
 }
 
 int main() {
-    mtInitRegistry();
-    MTSuite* math = mtAddSuite("Math");
+    minic_init_registry();
+    minic_suite* math = minic_add_suite("Math");
 
-    mtAddTest(math, "addf", TEST_FUNC_NAME(addf));
-    mtAddTest(math, "addd", TEST_FUNC_NAME(addd));
+    minic_add_test(math, "addf", TEST_FUNC_NAME(addf));
+    minic_add_test(math, "addd", TEST_FUNC_NAME(addd));
 
-    mtRunAllTests();
-    mtCleanupRegistry();
+    minic_run_all_tests();
+    minic_cleanup_registry();
     return 0;
 }
 ```
@@ -176,12 +176,12 @@ On failure, both actual and expected values are printed, along with file and lin
 [  FAILED  ] Math.addf (0 ms)
 ```
 ## API
-- `mtInitRegistry()` – initialize test registry.
-- `mtAddSuite(const char* name)` – create a test suite.
-- `mtAddTest(MTSuite* suite, const char* name, TestFuncPtr func)` – add test to suite.
-- `mtRunAllTests()` – run all suites/tests.
-- `mtRunSuiteTests(const char* name)` – run only one suite.
-- `mtCleanupRegistry()` – free memory after tests.
+- `minic_init_registry()` – initialize test registry.
+- `minic_add_suite(const char* name)` – create a test suite.
+- `minic_add_test(minic_suite* suite, const char* name, test_func_ptr func)` – add test to suite.
+- `minic_run_all_tests()` – run all suites/tests.
+- `minic_run_suite_tests(const char* name)` – run only one suite.
+- `minic_cleanup_registry()` – free memory after tests.
 
 ## LICENSE
 This project is licensed under the LGPL-2.1 License. See the LICENSE file for details.

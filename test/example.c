@@ -17,13 +17,13 @@ TEST_FUNC(addd) {
 }
 
 int main() {
-    mtInitRegistry();
-    MTSuite* math = mtAddSuite("Math");
+    minic_init_registry();
+    minic_suite* math = minic_add_suite("Math");
 
-    mtAddTest(math, "addf", TEST_FUNC_NAME(addf));
-    mtAddTest(math, "addd", TEST_FUNC_NAME(addd));
+    minic_add_test(math, "addf", TEST_FUNC_NAME(addf));
+    minic_add_test(math, "addd", TEST_FUNC_NAME(addd));
 
-    mtRunAllTests();
-    mtCleanupRegistry();
+    minic_run_all_tests();
+    minic_cleanup_registry();
     return 0;
 }
